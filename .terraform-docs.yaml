@@ -1,0 +1,152 @@
+formatter: "markdown"
+
+version: "v0.17.0"
+
+header-from: "main.tf"
+footer-from: ""
+
+recursive:
+  enabled: false
+  path: modules
+
+sections:
+  hide: []
+  show: []
+
+content: |-
+  # Overview
+
+  # Module: Azure Linux Web App and App Service Plan
+
+  This Terraform module provisions a Linux-based web application on Azure along with an associated App Service Plan. It offers flexibility to either create a new App Service Plan or utilize an existing one. Additionally, it provides the option to deploy the web app within a Virtual Network (VNet) for enhanced security by making it private and disabling public access.
+
+  # Structure
+
+  ### The module follows the following directory structure:
+  ```
+  modules/
+      app-service-plan/                # Module for provisioning App Service Plan
+      azure_linux_web_app/             # Module for provisioning Azure Linux Web App
+  configs/                             # Environment configurations
+  .github/workflow/release.yml         # Semantic release pipeline for release process triggers on PR close on main branch
+  package.json                         # Dependencies for semantic release
+  Makefile                             # Contains commands for streamlined execution
+  main.tf                              # Client template for the module
+  output.tf                            # Outputs configuration
+  variables.tf                         # Input variables definition
+  ```
+  ### Functionality
+
+    - **App Service Plan Creation**: Users have the flexibility to create a new App Service Plan by setting the `create_plan` argument. If not specified, the module utilizes an existing App Service Plan.
+    - **VNet Integration**: The module supports deploying the web app within a Virtual Network (VNet) for enhanced security. Users can pass VNet configurations, including subnet details, to make the web app private and disable public access.
+    - **Pre-commit Web Hooks**: Pre-commit web hooks are configured to ensure code quality and adherence to best practices before committing changes.
+
+  ### Usage config example
+  To deploy Azure Linux Web App follow the below steps
+  1. git clone https://github.com/arshad75/azure_linuxweb_app.git
+  2. In the configs/ dir create a config template following concention config-{ENV}.json for example if your env is prod use config-prod.json
+  3. Update the values in the config-{ENV}.json
+  4. Run make from the root directory as shown in the below example
+
+  ```
+  make plan ENVT_NAME=prod      - to run terraform plan
+  make create ENVT_NAME=prod    - to apply the reviewed changes
+  make destroy ENVT_NAME=prod   - to run terraform destroy
+  make tf-clean                 - to clean the environment
+
+  ```
+
+  #### config.json
+  ```json
+  {
+    "rg_name": "appservice",
+    "location": "eastus",
+    "tags": {
+        "test": "Tag"
+    },
+    "app_name": "mylinuxwebapptestdestoy",
+    "create_plan": false,
+    "identity_type": "SystemAssigned",
+    "public_network_access_enabled": false,
+    "virtual_network_subnet": {
+        "name": "subnet-dev-sea-private-001",
+        "vnet_name": "vnet-dev-sea-001",
+        "rg_name": "appservice"
+    },
+    "settings": {
+        "site_config": {
+          "minimum_tls_version": "1.2",
+          "http2_enabled": true,
+          "application_stack": {
+            "node_version": "18-lts"
+          }
+        },
+        "auth_settings": {
+          "enabled": false,
+          "runtime_version": "~1",
+          "unauthenticated_client_action": "AllowAnonymous"
+        }
+      },
+    "staging_slot_enabled": true,
+    "app_service_plan_name": "ASP-appservice-ac8d",
+    "os_type": "Linux",
+    "sku_name": "P0v3",
+    "worker_count": 1,
+    "service_plan_settings": {
+        "os_type": "Linux",
+        "sku": "P0v3",
+        "worker_count": "1"
+    }
+  }
+  ```
+
+  {{ .Requirements }}
+
+  ## Providers
+
+  | Name | Version |
+  |------|---------|
+  | <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | 3.92.0 |
+
+  {{ .Modules }}
+
+  {{ .Resources }}
+  | [azurerm_service_plan](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/service_plan) | resource |
+  | [azurerm_subnet](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/subnet) | data |
+  | [azurerm_linux_web_app](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/linux_web_app) | resource |
+  | [azurerm_linux_web_app_slot](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/linux_web_app_slot) | resource |
+  {{ .Inputs }}
+
+  {{ .Outputs }}
+
+
+output:
+  file: ""
+  mode: inject
+  template: |-
+    <!-- BEGIN_TF_DOCS -->
+    {{ .Content }}
+    <!-- END_TF_DOCS -->
+
+output-values:
+  enabled: false
+  from: ""
+
+sort:
+  enabled: true
+  by: name
+
+settings:
+  anchor: true
+  color: true
+  default: true
+  description: false
+  escape: true
+  hide-empty: false
+  html: true
+  indent: 2
+  lockfile: true
+  read-comments: true
+  required: true
+  sensitive: true
+  type: true

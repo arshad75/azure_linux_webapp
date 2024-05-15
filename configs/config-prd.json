@@ -1,0 +1,41 @@
+{
+    "rg_name": "appservice",
+    "location": "eastus",
+    "tags": {
+        "test" : "Tag"
+    },
+    "app_name": "mylinuxwebapptestdestoy",
+    "create_new_plan" : false,
+    "identity_type": "SystemAssigned",
+    "public_network_access_enabled": false,
+    "virtual_network_subnet": {
+        "name" :"subnet-dev-sea-private-001",
+        "vnet_name" :"vnet-dev-sea-001",
+        "rg_name" :"appservice"
+    },
+    "settings": {
+        "site_config": {
+          "minimum_tls_version": "1.2",
+          "http2_enabled": true,
+          "application_stack": {
+            "node_version": "18-lts"
+          }
+        },
+        "auth_settings": {
+          "enabled": false,
+          "runtime_version": "~1",
+          "unauthenticated_client_action": "AllowAnonymous"
+        }
+      },
+    "staging_slot_enabled": true,
+    "app_service_plan_name": "ASP-appservice-ac8d",
+    "os_type": "Linux",
+    "sku_name": "P0v3",
+    "worker_count": 1,
+    "service_plan_settings" : {
+        "os_type" : "Linux",
+        "sku" : "P0v3",
+        "worker_count" : "1"
+    }
+
+}

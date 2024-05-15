@@ -1,0 +1,26 @@
+# Terraform
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+crash.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+.terraformrc
+terraform.tfvars
+terraform.tfvars.json
+*.lock.hcl
+!terratest/example/terraform.tfvars.json
+!terratest/example/terraform.tfvars
+install.sh
+ci-config.json
+commitlint.config.js
+terraform.tfplan
+common-vars.json
+configs/*.tfplan
+configs/config.json
+common-configs/*
+configs/terraform.tfplan
+modules/.DS_Store
+.DS_Store
