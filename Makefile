@@ -9,6 +9,8 @@ validate:
 	# Validate the infrastructure.
 	terraform init -backend-config="key=$(SUBS_NAME)/$(ENVT_NAME)-azure_linux_web_app.tfstate" && terraform get && terraform validate
 
+
+
 plan:validate
 	terraform init -backend-config="key=$(SUBS_NAME)/$(ENVT_NAME)-azure_linux_web_app.tfstate" && terraform get -update && terraform plan -var-file="$(CONFIG_DIR)/config-$(ENVT_NAME).json" -out="$(CONFIG_DIR)/terraform.tfplan"
 
